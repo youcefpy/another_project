@@ -22,6 +22,9 @@ class Employe
     #[ORM\Column]
     private ?float $salaire = null;
 
+    #[ORM\ManyToOne(inversedBy: 'employes')]
+    private ?Departement $departement = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Employe
     public function setSalaire(float $salaire): static
     {
         $this->salaire = $salaire;
+
+        return $this;
+    }
+
+    public function getDepartement(): ?Departement
+    {
+        return $this->departement;
+    }
+
+    public function setDepartement(?Departement $departement): static
+    {
+        $this->departement = $departement;
 
         return $this;
     }

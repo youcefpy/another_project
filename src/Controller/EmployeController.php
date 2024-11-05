@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Employe;
-use App\Form\EmployeType;
+use App\Form\EmployeFormType;
 use App\Repository\EmployeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\All;
 
 #[Route('/employe')]
 final class EmployeController extends AbstractController
@@ -26,7 +27,7 @@ final class EmployeController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $employe = new Employe();
-        $form = $this->createForm(EmployeType::class, $employe);
+        $form = $this->createForm(EmployeFormType::class, $employe);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -35,6 +36,7 @@ final class EmployeController extends AbstractController
 
             return $this->redirectToRoute('app_employe_index', [], Response::HTTP_SEE_OTHER);
         }
+        // dd($form->all());
 
         return $this->render('employe/new.html.twig', [
             'employe' => $employe,
@@ -53,7 +55,7 @@ final class EmployeController extends AbstractController
     #[Route('/{id}/edit', name: 'app_employe_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Employe $employe, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(EmployeType::class, $employe);
+        $form = $this->createForm(EmployeFormType::class, $employe);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
